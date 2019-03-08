@@ -12,9 +12,12 @@ class App extends Component {
     this.addtaskRecord = this.addtaskRecord.bind(this);
     this.deleteItem = this.deleteItem.bind(this);
     this.delrecord = this.delrecord.bind(this);
+    this.getRecord = this.getRecord.bind(this);
+
     
   }
   componentDidMount(){
+    
     fetch('http://localhost:4000/tasks')
     .then(res=>res.json())
     .then(tasks=>this.setState({tasks}))
@@ -47,9 +50,23 @@ class App extends Component {
   delrecord(e){
     this.setState({tasks : e});
   }
+  getRecord(e){
+    console.log(e);
+    console.log(this.state.tasks);
+    const tasks = this.state.tasks.map(task => {
+      //console.log(task.id);
+      console.log(e.id);
+      if( e.id == task.id ){
+        return e;
+      }
+      return task;
+    });
+    this.setState({tasks});
+  }
   render() {
-   // console.log(this.state);
-    const tasks = this.state.tasks.map(task=> <Task {...task} onDel={this.delrecord} />);
+    //console.log(this.state.tasks);
+
+    const tasks = this.state.tasks.map(task=> <Task key={task.id} {...task} onDel={this.delrecord} onUpdate={this.getRecord} />);
     return (
       <div className="App">
         <header className="App-header">
